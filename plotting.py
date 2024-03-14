@@ -4,9 +4,9 @@ from matplotlib.colors import LinearSegmentedColormap
 import matplotlib.patches as mpatches
 import matplotlib.lines as mlines
 
-def plot():
+def plot(work_dir):
     fig, ax = plt.subplots(figsize=(11, 7.166666))
-    data = np.load("/home/aflaptop/Documents/radar_tracker/code/npy_files/occupancy_grid.npy",allow_pickle='TRUE').item()
+    data = np.load(f"{work_dir}/npy_files/occupancy_grid.npy",allow_pickle='TRUE').item()
     occupancy_grid = data["occupancy_grid"]
     origin_x = data["origin_x"]
     origin_y = data["origin_y"]
@@ -22,7 +22,7 @@ def plot():
     display_second_occupancy_grid = True
     if display_second_occupancy_grid:
         # Load and display the second occupancy grid
-        data2 = np.load("/home/aflaptop/Documents/radar_tracker/code/npy_files/occupancy_grid_without_dilating.npy", allow_pickle=True).item()
+        data2 = np.load(f"{work_dir}/npy_files/occupancy_grid_without_dilating.npy", allow_pickle=True).item()
         occupancy_grid2 = data2["occupancy_grid"]
         
         # Second imshow with alpha for overlap effect
@@ -76,9 +76,9 @@ def plot_measurements_in_background(measurement_dict,ax,origin_x=0,origin_y=0):
         ax.scatter(x, y, c=color)
 
 
-def plot_for_report(measurement_dict, multi_path_object, save_dir, filename):
+def plot_for_report(measurement_dict, multi_path_object, save_dir, filename, work_dir):
 
-    fig, ax, origin_x, origin_y = plot()
+    fig, ax, origin_x, origin_y = plot(work_dir)
     plot_measurements_in_background(measurement_dict, ax, origin_x, origin_y)
  
     multi_path_object.plot_multi_path(ax, origin_x, origin_y)

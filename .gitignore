@@ -2,3 +2,5 @@
 /old_files
 *.png
 *.npy
+!npy_files/occupancy_grid_without_dilating.npy
+!npy_files/occupancy_grid.npy

@@ -55,7 +55,7 @@ def main():
                 tracks = utilities.nearest_neighbor(measurement_dict)
                 tracks = utilities.filter_tracks(tracks)
                 new_measurement_dict = utilities.convert_tracks_to_measurement_dict(tracks, measurement_dict)
-                plotting.plot_for_report(new_measurement_dict, multi_paths, save_dir, filename)
+                plotting.plot_for_report(new_measurement_dict, multi_paths, save_dir, filename, work_dir)
                
             else:
                 print("No multi path scenario")
