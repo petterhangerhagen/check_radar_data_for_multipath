@@ -38,6 +38,10 @@ class MultiPathParent:
         # polar coordinates
         self.r = np.sqrt(self.x**2 + self.y**2)
         self.theta = np.arctan2(self.y, self.x)
+        # i want theta in the range [0, 2pi]
+        if self.theta < 0:
+            self.theta += 2*np.pi
+        
         
         self.theta_min = self.theta - self.error_margin_radians
         self.theta_max = self.theta + self.error_margin_radians
@@ -48,13 +52,21 @@ class MultiPathParent:
         poly_y = np.array(self.polygon_ys) + origin_y
         ploy = plt.Polygon(np.array([poly_x,poly_y]).T, closed=True, fill=True, edgecolor='#1f77b4', facecolor='#1f77b4', alpha=0.1,linewidth=3)
         ax.add_patch(ploy)
+
+        # When plotting the sector the theta_min and theta_max is dependent on the direction of travel of the vessel.
         if multi_path_num == 0:
-            ax.plot([origin_x, origin_x + 130*np.cos(self.theta_min)], [origin_y, origin_y + 130 * np.sin(self.theta_min)], color="#1f77b4", linestyle="--")
-        elif multi_path_num == 1:
             ax.plot([origin_x, origin_x + 130*np.cos(self.theta_max)], [origin_y, origin_y + 130 * np.sin(self.theta_max)], color="#1f77b4", linestyle="--")
+        elif multi_path_num == 1:
+            ax.plot([origin_x, origin_x + 130*np.cos(self.theta_min)], [origin_y, origin_y + 130 * np.sin(self.theta_min)], color="#1f77b4", linestyle="--")
+        
+        # if multi_path_num == 0:
+        #     ax.plot([origin_x, origin_x + 130*np.cos(self.theta_min)], [origin_y, origin_y + 130 * np.sin(self.theta_min)], color="#1f77b4", linestyle="--")
+        # elif multi_path_num == 1:
+        #     ax.plot([origin_x, origin_x + 130*np.cos(self.theta_max)], [origin_y, origin_y + 130 * np.sin(self.theta_max)], color="#1f77b4", linestyle="--")
             
+
     def __repr__(self) -> str:
-        return f"MultiPathParent: x = {self.x:.2f}, y = {self.y:.2f}, r = {self.r:.2f}, theta = {self.theta:.2f}, cluster_area = {self.cluster_area:.2f}"
+        return f"MultiPathParent: x = {self.x:.2f}, y = {self.y:.2f}, r = {self.r:.2f}, theta = {np.rad2deg(self.theta):.2f}, cluster_area = {self.cluster_area:.2f}"
 
 class MultiPathChild:
     def __init__(self, measurement):
@@ -62,6 +74,8 @@ class MultiPathChild:
         self.y = measurement[1]
         self.r = np.sqrt(self.x**2 + self.y**2)
         self.theta = np.arctan2(self.y, self.x)
+        if self.theta < 0:
+            self.theta += 2*np.pi
 
     def plot_child(self, ax, origin_x=0, origin_y=0):
         ax.plot(self.x + origin_x, self.y + origin_y, marker="o", color="#ff7f0e")
@@ -114,6 +128,8 @@ class MultiPath:
 
             for multi_path in multi_path_scenario:
                 if isinstance(multi_path, MultiPathParent):
+                    print(multi_path)
+                    print(multi_path_num)
                     multi_path.plot_parent(ax,multi_path_num, origin_x, origin_y)
                 else:
                     multi_path.plot_child(ax, origin_x, origin_y)

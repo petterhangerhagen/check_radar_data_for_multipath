@@ -15,7 +15,7 @@ import utilities
 """
 IMPORTANT: Need to change the radar_data_path and wokring_directory to the correct paths!!
 """
-work_dir = "/home/aflaptop/Desktop/multi_path"
+work_dir = os.getcwd()
 radar_data_path = "/home/aflaptop/Documents/radar_data"
 
 
@@ -36,6 +36,7 @@ def main():
     path_list = utilities.find_files(radar_data_path,txt_filename)
 
     path_list = [f"{radar_data_path}/data_aug_18-19/rosbag_2023-08-18-18-32-57.json"]
+    path_list = ["/home/aflaptop/Documents/radar_data/data_sep_17-18-19-24/rosbag_2023-09-17-12-12-38.json"]
     
     for i, file_path in enumerate(path_list):
         if True:
